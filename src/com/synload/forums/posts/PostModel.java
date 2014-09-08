@@ -5,13 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.kefirsf.bb.BBProcessorFactory;
-import org.kefirsf.bb.TextProcessor;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.mysql.jdbc.Statement;
 import com.synload.forums.App;
+import com.synload.forums.profile.ProfileModel;
 import com.synload.framework.SynloadFramework;
 import com.synload.framework.users.User;
 
@@ -19,6 +16,8 @@ import com.synload.framework.users.User;
 public class PostModel {
 	public String message, subject, id, tid, uid, parent, html = "";
 	public long createDate, postDate = 0;
+	public List<PostModel> children = null;
+	public int childrenCount = 0;
 	public PostModel(ResultSet rs){
 		try {
 			this.message = rs.getString("message");
@@ -64,7 +63,7 @@ public class PostModel {
 		List<PostModel> posts = new ArrayList<PostModel>();
 		try{
 			PreparedStatement s = SynloadFramework.sql.prepareStatement(
-				"SELECT `id`, `subject`, `message`, `tid`, `uid`, `created_date`, `post_date`, `parent` FROM `posts` WHERE `tid` = ? AND `parent` = 0 ORDER BY `post_date` ASC LIMIT "+(page*25)+",25"
+				"SELECT `id`, `subject`, `message`, `tid`, `uid`, `created_date`, `post_date`, `parent` FROM `posts` WHERE `tid` = ? AND `parent` = 0 ORDER BY `created_date` ASC LIMIT "+(page*25)+",25"
 			);
 			s.setString(1, tid);
 			ResultSet rs = s.executeQuery();
@@ -76,6 +75,85 @@ public class PostModel {
 		}catch(Exception e){
 		}
 		return posts;
+	}
+	public static List<PostModel> getPostChildren(String pid, int page){
+		List<PostModel> posts = new ArrayList<PostModel>();
+		try{
+			PreparedStatement s = SynloadFramework.sql.prepareStatement(
+				"SELECT `id`, `subject`, `message`, `tid`, `uid`, `created_date`, `post_date`, `parent` FROM `posts` WHERE `parent` = ? ORDER BY `created_date` ASC LIMIT "+(page*25)+",25"
+			);
+			s.setString(1, pid);
+			ResultSet rs = s.executeQuery();
+			while(rs.next()){
+				posts.add(new PostModel(rs));
+			}
+			rs.close();
+			s.close();
+		}catch(Exception e){
+		}
+		return posts;
+	}
+	public List<PostModel> getChildren() {
+		return children;
+	}
+	public void setChildren(List<PostModel> children) {
+		this.children = children;
+	}
+	public void renderChildren(){
+		List<PostModel> posts = new ArrayList<PostModel>();
+		try{
+			PreparedStatement s = SynloadFramework.sql.prepareStatement(
+				"SELECT `id`, `subject`, `message`, `tid`, `uid`, `created_date`, `post_date`, `parent` FROM `posts` WHERE `parent` = ? ORDER BY `post_date` DESC LIMIT 4"
+			);
+			s.setString(1, this.id);
+			ResultSet rs = s.executeQuery();
+			while(rs.next()){
+				posts.add(new PostModel(rs));
+			}
+			rs.close();
+			s.close();
+		}catch(Exception e){
+		}
+		this.setChildren(posts);
+	}
+	public int getPage(){
+		try{
+			PreparedStatement s = SynloadFramework.sql.prepareStatement(
+					"SELECT COUNT(`id`) FROM `posts` WHERE `parent`=? AND `id`<=? ORDER BY `post_date` ASC"
+			);
+			s.setString(1, parent);
+			s.setString(2, id);
+			ResultSet rs = s.executeQuery();
+			while(rs.next()){
+				int i = (int) Math.floor((rs.getInt("COUNT(`id`)")-1)/25)+1;
+				rs.close();
+				s.close();
+				return i;
+			}
+			rs.close();
+			s.close();
+		}catch(Exception e){
+		}
+		return 1;
+	}
+	public static int getPostChildrenCount(String pid){
+		try{
+			PreparedStatement s = SynloadFramework.sql.prepareStatement(
+				"SELECT COUNT(`id`) FROM `posts` WHERE  `parent` = ?"
+			);
+			s.setString(1, pid);
+			ResultSet rs = s.executeQuery();
+			while(rs.next()){
+				int i = rs.getInt("COUNT(`id`)");
+				rs.close();
+				s.close();
+				return i;
+			}
+			rs.close();
+			s.close();
+		}catch(Exception e){
+		}
+		return 0;
 	}
 	public static PostModel getLatest(String tid, int page){
 		try{
@@ -99,7 +177,7 @@ public class PostModel {
 	public static int postCount(String tid){
 		try{
 			PreparedStatement s = SynloadFramework.sql.prepareStatement(
-				"SELECT COUNT(`id`) FROM `posts` WHERE `tid` = ?"
+				"SELECT COUNT(`id`) FROM `posts` WHERE `tid` = ? AND `parent`='0'"
 			);
 			s.setString(1, tid);
 			ResultSet rs = s.executeQuery();
@@ -153,6 +231,25 @@ public class PostModel {
 		}
 		return null;
 	}
+	public static PostModel getMain(String tid){
+		try{
+			PreparedStatement s = SynloadFramework.sql.prepareStatement(
+				"SELECT `id`, `subject`, `message`, `tid`, `uid`, `created_date`, `post_date`, `parent` FROM `posts` WHERE `tid` = ? ORDER BY `created_date` ASC LIMIT 1;"
+			);
+			s.setString(1, tid);
+			ResultSet rs = s.executeQuery();
+			while(rs.next()){
+				PostModel post = new PostModel(rs);
+				rs.close();
+				s.close();
+				return post;
+			}
+			rs.close();
+			s.close();
+		}catch(Exception e){
+		}
+		return null;
+	}
 	public static PostModel get(String pid){
 		try{
 			PreparedStatement s = SynloadFramework.sql.prepareStatement(
@@ -180,6 +277,9 @@ public class PostModel {
 	}
 	public String getId() {
 		return id;
+	}
+	public int getChildrenCount(){
+		return PostModel.getPostChildrenCount(this.getId());
 	}
 	public String getTid() {
 		return tid;
@@ -233,15 +333,28 @@ public class PostModel {
 	public void setTid(String tid) {
 		this.tid = tid;
 	}
+	
+	public String getHtml() {
+		return html;
+	}
+	public void setHtml(String html) {
+		this.html = html;
+	}
+	public String getParent() {
+		return parent;
+	}
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
-	public User getUser() {
-		User u = null;
+	public ProfileModel getUser() {
+		ProfileModel u = null;
 		if(App.userCache.containsKey(uid)){
 			u = App.userCache.get(uid);
 		}else{
-			App.userCache.put(uid,User.findUser(Long.valueOf(uid)));
+			App.userCache.put(uid,new ProfileModel(User.findUser(Long.valueOf(uid))));
 			u = App.userCache.get(uid);
 		}
 		return u;

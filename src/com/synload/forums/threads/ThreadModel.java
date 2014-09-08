@@ -8,19 +8,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.mysql.jdbc.Statement;
 import com.synload.forums.App;
 import com.synload.forums.categories.CategoryModel;
 import com.synload.forums.posts.PostModel;
+import com.synload.forums.profile.ProfileModel;
 import com.synload.framework.SynloadFramework;
 import com.synload.framework.users.User;
 
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="class")
 public class ThreadModel {
-	public static Map<String,ThreadModel> cache = new HashMap<String,ThreadModel>();
+	//public static Map<String,ThreadModel> cache = new HashMap<String,ThreadModel>();
 	public String title, id, uid, pid, cid = "";
 	public long createDate, postDate, views = 0;
 	public PostModel post, latest = null;
@@ -68,8 +67,7 @@ public class ThreadModel {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		PostModel pst = new PostModel(title, message, id, uid, "0");
-		
+		new PostModel(title, message, id, uid, "0");	
 	}
 	public static List<ThreadModel> getList(List<String> ids, int page){
 		List<ThreadModel> threads = new ArrayList<ThreadModel>();
@@ -79,9 +77,9 @@ public class ThreadModel {
 			);
 			ResultSet rs = s.executeQuery();
 			while(rs.next()){
-				String id = rs.getString("id");
-				ThreadModel.cache.put(id, new ThreadModel(rs));
-				threads.add(ThreadModel.cache.get(id));
+				//String id = rs.getString("id");
+				//ThreadModel.cache.put(id, new ThreadModel(rs));
+				threads.add(new ThreadModel(rs));
 			}
 			rs.close();
 			s.close();
@@ -90,7 +88,7 @@ public class ThreadModel {
 		return threads;
 	}
 	public static ThreadModel get(String id){
-		if(!ThreadModel.cache.containsKey(id)){
+		//if(!ThreadModel.cache.containsKey(id)){
 			try{
 				PreparedStatement s = SynloadFramework.sql.prepareStatement(
 					"SELECT `id`, `title`, `uid`, `pid`, `cid`, `created_date`, `post_date`, `status`, `views` FROM `threads` WHERE `id`=?"
@@ -99,18 +97,18 @@ public class ThreadModel {
 				ResultSet rs = s.executeQuery();
 				while(rs.next()){
 					ThreadModel thd =  new ThreadModel(rs);
-					ThreadModel.cache.put(thd.getId(), thd);
+					//ThreadModel.cache.put(thd.getId(), thd);
 					rs.close();
 					s.close();
-					return ThreadModel.cache.get(thd.getId());
+					return thd;
 				}
 				rs.close();
 				s.close();
 			}catch(Exception e){
 			}
-		}else{
-			return ThreadModel.cache.get(id);
-		}
+		//}else{
+		//	return ThreadModel.cache.get(id);
+		//}
 		return null;
 	}
 	public static ThreadModel getByCategoryLatest(String id){
@@ -122,10 +120,10 @@ public class ThreadModel {
 			ResultSet rs = s.executeQuery();
 			while(rs.next()){
 				ThreadModel thd = new ThreadModel(rs); 
-				ThreadModel.cache.put(thd.getId(),thd);
+				//ThreadModel.cache.put(thd.getId(),thd);
 				rs.close();
 				s.close();
-				return ThreadModel.cache.get(thd.getId());
+				return thd;
 			}
 			rs.close();
 			s.close();
@@ -149,6 +147,25 @@ public class ThreadModel {
 		}
 		return threads;
 	}
+	public static int threadCount(String cid){
+		try{
+			PreparedStatement s = SynloadFramework.sql.prepareStatement(
+				"SELECT COUNT(`id`) FROM `threads` WHERE `cid` = ?"
+			);
+			s.setString(1, cid);
+			ResultSet rs = s.executeQuery();
+			while(rs.next()){
+				int pc = rs.getInt("COUNT(`id`)");
+				rs.close();
+				s.close();
+				return pc;
+			}
+			rs.close();
+			s.close();
+		}catch(Exception e){
+		}
+		return 0;
+	}
 	public long getViews() {
 		return views;
 	}
@@ -170,12 +187,12 @@ public class ThreadModel {
 	public String getId() {
 		return id;
 	}
-	public User getUser() {
-		User u = null;
+	public ProfileModel getUser() {
+		ProfileModel u = null;
 		if(App.userCache.containsKey(uid)){
 			u = App.userCache.get(uid);
 		}else{
-			App.userCache.put(uid,User.findUser(Long.valueOf(uid)));
+			App.userCache.put(uid, new ProfileModel(User.findUser(Long.valueOf(uid))));
 			u = App.userCache.get(uid);
 		}
 		return u;
@@ -211,7 +228,7 @@ public class ThreadModel {
 		this.setLatest(PostModel.getLatest(id));
 	}
 	public void renderPost() {
-		this.setPost(PostModel.get(pid));
+		this.setPost(PostModel.getMain(id));
 	}
 	public int getReplies() {
 		return PostModel.postCount(id)-1;

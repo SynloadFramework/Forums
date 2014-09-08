@@ -10,19 +10,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.mysql.jdbc.Statement;
-import com.synload.forums.posts.PostModel;
 import com.synload.forums.threads.ThreadModel;
 import com.synload.framework.SynloadFramework;
 
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="class")
 public class CategoryModel {
-	public static Map<String,CategoryModel> cache = new HashMap<String,CategoryModel>();
+	//public static Map<String,CategoryModel> cache = new HashMap<String,CategoryModel>();
 	public String name, description, order, id, parent = "";
 	public CategoryModel parentCategory = null;
+	public ThreadModel latest;
 	public List<CategoryModel> children = null;
 	public List<String> moderators = new ArrayList<String>();
 	public List<String> groups = new ArrayList<String>();
@@ -155,8 +154,11 @@ public class CategoryModel {
 	public String getOrder() {
 		return order;
 	}
+	public void renderLatest(){
+		this.latest = ThreadModel.getByCategoryLatest(id);
+	}
 	public ThreadModel getLatest(){
-		return ThreadModel.getByCategoryLatest(id);
+		return this.latest;
 	}
 	@JsonIgnore
 	public void renderChildren(){

@@ -16,6 +16,7 @@ public class ThreadForm extends Response {
 			this.setTemplate(this.getTemplate("./elements/forums/thread_form.html"));
 		}
 		category = CategoryModel.get(cid);
+		this.addObject("CID", category.getId());
 		Request r = new Request("get","threadform");
 			HashMap<String, String> data = new HashMap<String, String>();
 			data.put("cid", cid);

@@ -12,26 +12,33 @@ import com.synload.framework.ws.WSHandler;
 public class CategoryPage extends Response {
 	public CategoryModel category = null;
 	public List<ThreadModel> threads = null;
-	public int page = 0;
+	public long userid = 0;
+	public int page, total = 0;
 	public CategoryPage(WSHandler user, List<String> templateCache, String cid, int page){
 		this.page = page;
+		if(user.getUser()!=null){
+			this.userid = user.getUser().getId();
+		}
 		this.setTemplateId("cat");
 		if(!templateCache.contains(this.getTemplateId())){
 			this.setTemplate(this.getTemplate("./elements/forums/category.html"));
 		}
 		category = CategoryModel.get(cid);
 		category.renderParent();
+		total = ThreadModel.threadCount(category.getId());
 		Request r = new Request("get","category");
 			HashMap<String, String> data = new HashMap<String, String>();
 			data.put("cid", cid);
 			data.put("page",String.valueOf(page));
 			r.setData(data);
 		this.setRequest(r);
+		this.addObject("CID", category.getId());
 		this.setAction("alone");
 		this.setPageId("category"+cid);
 		this.threads = ThreadModel.getList(cid, page-1);
 		for(int i = 0;i<threads.size();i++){
 			threads.get(i).renderLatest();
+			this.addObject("TID", threads.get(i).getId());
 		}
 		this.setParent(".content[page='wrapper']");
 		this.setParentTemplate("wrapper");
