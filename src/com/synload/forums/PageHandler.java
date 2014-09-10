@@ -141,16 +141,26 @@ public class PageHandler {
 					new Success("post_create")
 				)
 			);
+			
+			ThreadModel th = ThreadModel.get(ps.getTid());
+			th.renderLatest();
+			
 			Response r = new Response();
-			r.setCallEvent("new_post");
+			r.setCallEvent("new_thread");
 			r.setForceParent(false);
 				Map<String,String> data = new HashMap<String,String>();
+				data.put("thread", user.ow.writeValueAsString(th));
+			r.setData(data);
+			SynloadFramework.broadcast(OOnPage.getClients("CID", th.getCid()),user.ow.writeValueAsString(r));
+			
+			r = new Response();
+			r.setCallEvent("new_post");
+			r.setForceParent(false);
+				data = new HashMap<String,String>();
 				data.put("post", user.ow.writeValueAsString(PostModel.get(ps.getId())));
-				data.put("tid", ps.getTid());
-				data.put("parent", request.getData().get("pid"));
-				data.put("page", String.valueOf(ps.getPage()));
 			r.setData(data);
 			SynloadFramework.broadcast(OOnPage.getClients("TID", ps.getTid()),user.ow.writeValueAsString(r)); // send out the new post event
+			
 		}else{
 			//login
 		}
@@ -168,7 +178,7 @@ public class PageHandler {
 			user.send(
 				new ThreadPage(user, request.getTemplateCache(), th.getId(), 1, "")
 			);
-			
+			th.renderLatest();
 			Response r = new Response();
 			r.setCallEvent("new_thread");
 			r.setForceParent(false);
