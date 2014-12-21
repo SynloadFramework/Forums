@@ -1,0 +1,9 @@
+{{post}}
+<textarea class="save_{{id}}" style="width:100%;min-height:100px;">{{message|html}}</textarea></br>
+<a href="javascript:;" onclick="forum.savePost('{{id}}','.save_{{id}}','#edit_{{id}}');" style="padding:8px;padding-left:18px;padding-right:18px;float:right;margin:8px;border:#f0f0f0 solid 1px;">Save edit</a>
+<a href="javascript:;" onclick="forum.singlePost('{{id}}','#edit_{{id}}');" style="padding:8px;padding-left:18px;padding-right:18px;float:right;margin:8px;border:#f0f0f0 solid 1px;">Cancel</a>
+
+<script>
+  $(".save_{{id}}").wysibb();
+</script>
+{{/post}}

@@ -1,0 +1,14 @@
+<div style="float:left;width:100%;margin-bottom:10px;"><div style="float:left;width:100%;margin-bottom:10px;"><a href="javascript:system.loadDefault();template.showLoad();">Index</a> <img src="/resources/light/appbar.chevron.right.png" width="20"/> {{profile.user.username}}'s Profile </div>
+<div style="float:left;width:100%;margin-bottom:10px;">
+	<div style="float:left;width:20%;margin-bottom:10px;">
+		<h2>{{profile.user.username}}</h2>
+		<img width="200" src="{{profile.avatar}}"><br />
+		<div style="width:100%;padding-bottom:9px;padding-top:12px;font-size:11px;padding-left:11px;">
+			<span style="padding:3px;padding-left:0px;width:100%;float:left;">Posts: {{profile.posts}}</span>
+			<span style="padding:3px;padding-left:0px;width:100%;float:left;">Joined: {{profile.user.createdDate|moment>MMM D, YYYY}}</span>
+		</div>
+	</div>
+	<div style="float:left;width:79%;margin-left:1%;margin-bottom:10px;">
+		<div style="width:100%;">{{profile.signatureHtml}}</div>
+	</div>
+</div>

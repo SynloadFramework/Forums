@@ -1,0 +1,47 @@
+<div style="float:left;width:100%;margin-bottom:10px;">Index</div>
+<h3 style="font-size:20px;">Forum Categories</h3>
+{{categories}}
+<div style="padding:5px;margin-bottom:5px;float:left;width:100%;">
+	<h3 style="font-size:16px;border-bottom:#bfbfbf 2px solid;">{{name}}</h3>
+	<ul class="outer">
+		{{children}}
+		<li class="category" category="{{id}}" style="width:100%;float:left;background:#fafafa;padding:2px;margin-top:2px;margin-bottom:2px;border:1px solid #f0f0f0;border-bottom:2px solid #f0f0f0;">
+			<div style="width:60%;float:left;padding-top:4px;">
+				<b style="padding-left:10px;">
+					<a href="javascript:;" onclick="forum.loadCategory('{{id}}','1');" style="color:#6593e9;">
+						{{name}}
+					</a>
+				</b></br>
+				<i style="padding-left:15px;">{{description}}</i>
+			</div>
+			<div style="width:300px;padding-top:5px;padding-left:10px;border-left:#e0e0e0 solid 2px;padding-bottom:5px;float:right;">
+				{{if latest|empty}}<span style="padding-top:10px;padding-bottom:10px;float:left;">No Threads!</span>{{else}}
+					<a id="cat_{{id}}_title" href="javascript:forum.loadThread('{{latest.id}}',{{latest.latest.page}},'#post_{{latest.latest.id}}');" style="letter-spacing: 1px;color:#6593e9;padding-left:4px;">
+						{{latest.title|clean}}
+					</a><br/>
+					By <a href="javascript:;" id="cat_{{id}}_user" onclick="forum.loadProfile('{{latest.user.user.id}}');" style="color:#28ce24;">
+						{{latest.user.username}}
+					</a> 
+					at <span  id="cat_{{id}}_date">{{latest.createDate|moment>MMM D, YYYY h:mm a}}</span>
+				{{/if}}
+			</div>
+		</li>
+		{{/children}}
+	</ul>
+</div>
+{{/categories}}
+<script>
+  var ggDrag = false;
+  $( ".category" ).draggable({
+	axis: "x",
+	revert: true,
+	drag: function() {
+		if($(this).offset().left>200 && !ggDrag){
+			forum.loadCategory($(this).attr("category"),'1');ggDrag = true;
+		}
+	}
+  });
+  template.onUnload=function(){
+    $.scrollTo(  { top:0, left:0}, 250 );
+  }
+</script>

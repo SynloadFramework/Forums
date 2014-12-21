@@ -1,0 +1,32 @@
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom:0;width:100%;">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="javascript:system.loadDefault();template.showLoad();">Synload Forums</a>
+            </div>
+	<div class="collapse navbar-collapse">
+		<ul class="nav navbar-nav">
+			<li><a href="javascript:system.loadDefault();template.showLoad();">Home</a></li>
+			<li id="loginId"><a href="javascript:user.showLogin();template.showLoad();">Login</a></li>
+			<li><a href="javascript:forum.editProfile();template.showLoad();">Edit Profile</a></li>
+			<li id="logoutId" style="display:none;"><a href="javascript:user.logout();template.showLoad();">Logout</a></li>
+		</ul>
+	</div>
+	
+</nav>
+    <div id="content" style="min-width:1000px;width:85%;margin:0px auto;">
+	
+    </div>
+<script>
+$(function(){
+	if(user.name!=""){
+		$("#logoutId a").html("Logout "+user.name);
+		$("#loginId").fadeOut();
+		$("#logoutId").fadeIn();
+	}
+});
+</script>

@@ -1,0 +1,61 @@
+	<li id="post_{{id}}" class="itemOuter freshpost newpost{{id}}" post="{{id}}" style="height:0px;">
+		<div class="leftPost">
+			<div class="user">
+				<a href="javascript:;" onclick="forum.loadProfile('{{user.user.id}}');" style="color:#28ce24;">
+					{{user.username}}
+				</a>
+			</div>
+			<div class="avatar">
+				<img src="{{user.avatar}}" style="max-width:65%;"/>
+			</div>
+			<div class="info">
+				<span class="inner">Posts: {{user.posts}}</span>
+				<span class="inner">Joined: {{user.user.createdDate|moment>MMM D, YYYY}}</span>
+			</div>
+		</div>
+		<div class="midRightPost">
+			<div class="date">
+				<span style="float:left;padding-top:2px;">
+					posted on <b style="font-size:11px;">{{createDate|moment>MMM D, YYYY h:mm a}}</b>
+				</span>
+				<span style="float:right;padding-right:10px;">
+					<span class="menu">
+						<img src="/resources/light/appbar.lines.horizontal.4.png" width="22"/>
+						<ul>
+							<li class="ico"><p>Post Actions</p><img src="/resources/light/appbar.lines.horizontal.4.png" width="22"/></li>
+							<li class="rr"><a href="javascript:;" onclick="forum.editPost('{{id}}','#edit_{{id}}');"><img src="/resources/light/appbar.edit.box.png" width="25" />Edit this post</a></li>
+							<li class="rr"><a href="javascript:;" onclick="forum.delete('{{id}}');"><img src="/resources/light/appbar.close.png" width="25" />Delete this post</a></li>
+						</ul>
+					</span>
+					<a href="javascript:;" onclick="forum.reply('{{id}}','{{page}}');"><img src="/resources/light/appbar.message.png" width="22"/></a>
+				</span>
+			</div>
+			<div class="html">
+				<div style="padding-left:10px;padding-right:10px;overflow:hidden;" id="edit_{{id}}">{{html}}</div>
+			</div>
+			{{if user.signature|notempty}}
+				<div class="signature">
+					{{user.signatureHtml}}
+				</div>
+			{{/if}}
+		</div>
+		<div class="farRightPost">
+			<center>
+				<span style="font-size:20px;width:100%;float:left;color:#a0a0a0;">
+					<a href="javascript:;" onclick="forum.loadPost('{{id}}','1','0');">
+						<img src="/resources/light/appbar.navigate.next.png">
+					</a>
+				</span>
+				<span style="font-size:24px;">{{childrenCount}}</span>
+			</center>
+		</div>
+	</li>
+	{{if children|notempty}}
+	{{children}}
+	<li class="childPreviewOuter">
+		<span class="childPreviewInner">
+			&quot;<a href="javascript: forum.loadPost('{{parent}}','{{page}}','#post_{{id}}');">{{message|clean|chop>100}}</a>&quot; at <i>{{createDate|moment>MMM D, YYYY h:mm a}}</i> by <a href="javascript:;" onclick="forum.loadProfile('{{user.user.id}}');" style="color:#28ce24;">{{user.user.username}}</a>
+		</span>
+	</li>
+	{{/children}}
+	{{/if}}

@@ -1,0 +1,54 @@
+{{profile}}<a href="javascript:system.loadDefault();template.showLoad();">Index</a> / <a href="javascript:;" onclick="forum.editProfile('{{user.id}}',1)" style="color:#6593e9;">Editing my profile</a>
+<h4><b style="color:#6593e9;">Edit my profile</b></h4>
+<ul style="list-style:none;">
+	<li style="width:100%;float:left;border-top:0px;background:#fcfcfc;padding:5px;margin-top:5px;margin-bottom:15px;border-radius:12px;">
+		<div style="width:100%;float:left;">
+			<div style="float:left;width:15%;padding-top:25px;">
+				<center>
+					<div style="width:100%;padding-bottom:10px;">Avatar</div>
+					<div style="padding:1px;margin-top:6px;"><input type="file" name="stores[]" id="storez"></div>
+				</center>
+			</div>
+			<div style="width:85%;padding:15px;padding-left:20px;float:left;border-left:#efefef solid 1px;">
+				<input type="text" id="avatar" value="{{avatar|clean}}" style="font-size:16px;padding:3px;padding-left:6px;border:1px solid #c7c7c7;background:#fff;width:60%;"/>
+				<div id="progOuter" style="display:none;padding:1px;margin-top:20px;background:#cfcfcf;width:50%;"><span id="prog" style="display:block;height:9px;background:#0944c3;width:0%;"></span></div>
+			</div>
+		</div>
+		<div style="float:left;width:15%;padding-top:25px;">
+			<center>
+				<div style="width:100%;padding-bottom:10px;">Signature<br/><i>No html</i></div>
+			</center>
+		</div>
+		<div style="width:85%;padding:15px;padding-left:20px;float:left;border-left:#efefef solid 1px;">
+			<textarea class="editorProfile" style="height:300px;width:100%;">{{signature|html}}</textarea></br>
+			<a href="javascript:;" onclick="forum.saveProfile('.editorProfile','#avatar');" style="padding:8px;padding-left:18px;padding-right:18px;float:right;margin:8px;border:#f0f0f0 solid 1px;">Save Profile</a>
+		</div>
+	</li>
+</ul>
+<script>
+  $(".editorProfile").wysibb();
+  template.onUnload = function(){
+    $(".editorProfile").destroy();
+  };
+	$("#storez").html5_upload({
+		url: function(number) {
+			return "/upload";
+		},
+		onStart: function(event, total){
+			$("#progOuter").fadeIn();
+			return true;
+		},
+		setProgress: function(val) {
+			$("#prog").css({"width":Math.ceil(val*100)+"%"});
+		},
+		extraFields: {
+			"key": user.sessionID,
+			"user": user.id 
+		},
+		onFinishOne: function(event, response, name, number, total){
+			$("#avatar").val("/"+$.parseJSON(response)[0]);
+			$("#progOuter").fadeOut();
+		}
+	});
+</script>
+{{/profile}}
