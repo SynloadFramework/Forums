@@ -1,9 +1,8 @@
-package com.synload.forums.pages;
+package com.synload.forums.profile;
 
 import java.util.List;
 
 import com.synload.forums.App;
-import com.synload.forums.profile.ProfileModel;
 import com.synload.framework.handlers.Request;
 import com.synload.framework.handlers.Response;
 import com.synload.framework.users.User;
