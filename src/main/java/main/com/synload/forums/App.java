@@ -1,4 +1,4 @@
-package com.synload.forums;
+package main.com.synload.forums;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import org.kefirsf.bb.TextProcessor;
 
 import com.jhalt.expiringmap.ExpiringMap;
 import com.jhalt.expiringmap.ExpiringMap.ExpirationPolicy;
-import com.synload.forums.profile.ProfileModel;
+import main.com.synload.forums.profile.ProfileModel;
 import com.synload.framework.modules.ModuleClass;
 import com.synload.framework.modules.annotations.Module;
 

@@ -1,4 +1,4 @@
-package com.synload.forums;
+package main.com.synload.forums;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

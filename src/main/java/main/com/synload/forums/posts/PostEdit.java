@@ -1,4 +1,4 @@
-package com.synload.forums.posts;
+package main.com.synload.forums.posts;
 
 import java.util.List;
 

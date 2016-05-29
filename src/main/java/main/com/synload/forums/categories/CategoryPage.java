@@ -1,9 +1,9 @@
-package com.synload.forums.categories;
+package main.com.synload.forums.categories;
 
 import java.util.HashMap;
 import java.util.List;
 
-import com.synload.forums.threads.ThreadModel;
+import main.com.synload.forums.threads.ThreadModel;
 import com.synload.framework.handlers.Request;
 import com.synload.framework.handlers.Response;
 import com.synload.framework.ws.WSHandler;

@@ -1,22 +1,22 @@
-package com.synload.forums;
+package main.com.synload.forums;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.synload.eventsystem.events.RequestEvent;
-import com.synload.forums.categories.CategoryPage;
-import com.synload.forums.pages.ForumIndex;
-import com.synload.forums.posts.PostEdit;
-import com.synload.forums.posts.PostModel;
-import com.synload.forums.posts.PostPage;
-import com.synload.forums.posts.SinglePost;
-import com.synload.forums.profile.ProfileEdit;
-import com.synload.forums.profile.ProfileModel;
-import com.synload.forums.profile.ProfilePage;
-import com.synload.forums.threads.ThreadForm;
-import com.synload.forums.threads.ThreadModel;
-import com.synload.forums.threads.ThreadPage;
+import main.com.synload.forums.categories.CategoryPage;
+import main.com.synload.forums.pages.ForumIndex;
+import main.com.synload.forums.posts.PostEdit;
+import main.com.synload.forums.posts.PostModel;
+import main.com.synload.forums.posts.PostPage;
+import main.com.synload.forums.posts.SinglePost;
+import main.com.synload.forums.profile.ProfileEdit;
+import main.com.synload.forums.profile.ProfileModel;
+import main.com.synload.forums.profile.ProfilePage;
+import main.com.synload.forums.threads.ThreadForm;
+import main.com.synload.forums.threads.ThreadModel;
+import main.com.synload.forums.threads.ThreadPage;
 import com.synload.framework.OOnPage;
 import com.synload.framework.SynloadFramework;
 import com.synload.framework.elements.Success;

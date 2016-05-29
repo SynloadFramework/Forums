@@ -1,7 +1,7 @@
-package com.synload.forums.events;
+package main.com.synload.forums.events;
 
 import com.synload.eventsystem.EventClass;
-import com.synload.forums.posts.PostModel;
+import main.com.synload.forums.posts.PostModel;
 import com.synload.forums.threads.ThreadModel;
 import com.synload.framework.handlers.Request;
 import com.synload.framework.ws.WSHandler;

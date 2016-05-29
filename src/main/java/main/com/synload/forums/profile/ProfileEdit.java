@@ -1,4 +1,4 @@
-package com.synload.forums.profile;
+package main.com.synload.forums.profile;
 
 import java.util.List;
 

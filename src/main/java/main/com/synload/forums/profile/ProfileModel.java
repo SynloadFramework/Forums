@@ -1,4 +1,4 @@
-package com.synload.forums.profile;
+package main.com.synload.forums.profile;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.synload.forums.App;
-import com.synload.forums.posts.PostModel;
+import main.com.synload.forums.posts.PostModel;
 import com.synload.framework.SynloadFramework;
 import com.synload.framework.users.User;
 

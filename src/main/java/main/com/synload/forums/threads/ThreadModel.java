@@ -1,4 +1,4 @@
-package com.synload.forums.threads;
+package main.com.synload.forums.threads;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.mysql.jdbc.Statement;
 import com.synload.forums.App;
 import com.synload.forums.categories.CategoryModel;
-import com.synload.forums.posts.PostModel;
-import com.synload.forums.profile.ProfileModel;
+import main.com.synload.forums.posts.PostModel;
+import main.com.synload.forums.profile.ProfileModel;
 import com.synload.framework.SynloadFramework;
 import com.synload.framework.users.User;
 

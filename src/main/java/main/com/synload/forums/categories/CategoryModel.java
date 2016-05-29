@@ -1,4 +1,4 @@
-package com.synload.forums.categories;
+package main.com.synload.forums.categories;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.mysql.jdbc.Statement;
-import com.synload.forums.threads.ThreadModel;
+import main.com.synload.forums.threads.ThreadModel;
 import com.synload.framework.SynloadFramework;
 
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="class")

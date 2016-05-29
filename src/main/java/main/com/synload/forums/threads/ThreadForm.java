@@ -1,4 +1,4 @@
-package com.synload.forums.threads;
+package main.com.synload.forums.threads;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.synload.forums.pages;
+package main.com.synload.forums.pages;
 
 import java.util.ArrayList;
 import java.util.List;
